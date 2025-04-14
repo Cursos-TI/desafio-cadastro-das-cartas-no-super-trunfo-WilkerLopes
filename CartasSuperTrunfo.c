@@ -3,11 +3,14 @@
 
 // Desafio Super Trunfo - Países
 // Tema 1 - Cadastro das Cartas
-// Este código inicial serve como base para o desenvolvimento do sistema de cadastro de cartas de cidades.
-// Siga os comentários para implementar cada parte do desafio.
-//Teste larissa
 
-int main() {
+// Protótipos das funções
+void cadastrarCarta(const char *carta, char *estado, char id[4], char cidade[50], int *populacao, float *area, float *pib, int *pontosTuristicos);
+void mostrarCarta(int cartaNum, char estado, char id[4], char cidade[50], int populacao, float area, float pib, int pontosTuristicos, float densidadePopulacional, float pibPerCapita);
+void calcularEstatisticas(int populacao, float area, float pib, float *densidadePopulacional, float *pibPerCapita);
+
+int main()
+{
     // Definir locale PT-br
     setlocale(LC_ALL, "Portuguese_Brazil");
 
@@ -19,6 +22,8 @@ int main() {
     float primeiraCartaArea;
     float primeiraCartaPib;
     int primeiraCartaPontosTuristicos;
+    float primeiraCartaDensidadePopulacional;
+    float primeiraCartaPibPerCapita;
 
     // Definição das variáveis para a segunda carta
     char segundaCartaEstado;
@@ -28,75 +33,72 @@ int main() {
     float segundaCartaArea;
     float segundaCartaPib;
     int segundaCartaPontosTuristicos;
+    float segundaCartaDensidadePopulacional;
+    float segundaCartaPibPerCapita;
 
-    // Cadastro da primeira carta
-    printf("===== Cadastro da primeira carta =====\n");
-    printf("Digite o estado (letra de A a H): ");
-    scanf(" %c", &primeiraCartaEstado);
+    // Recebendo os valores
+    cadastrarCarta("primeira carta", &primeiraCartaEstado, primeiraCartaID, primeiraCartaCidade, &primeiraCartaPopulacao, &primeiraCartaArea, &primeiraCartaPib, &primeiraCartaPontosTuristicos);
+    cadastrarCarta("segunda carta", &segundaCartaEstado, segundaCartaID, segundaCartaCidade, &segundaCartaPopulacao, &segundaCartaArea, &segundaCartaPib, &segundaCartaPontosTuristicos);
 
-    printf("Digite o código da carta (ex: A01): ");
-    scanf("%s", primeiraCartaID);
+    // Calculando as estatísticas de cada carta
+    calcularEstatisticas(primeiraCartaPopulacao, primeiraCartaArea, primeiraCartaPib, &primeiraCartaDensidadePopulacional, &primeiraCartaPibPerCapita);
+    calcularEstatisticas(segundaCartaPopulacao, segundaCartaArea, segundaCartaPib, &segundaCartaDensidadePopulacional, &segundaCartaPibPerCapita);
 
-    printf("Digite o nome da cidade: ");
-    scanf("%s", primeiraCartaCidade);
-
-    printf("Digite a população: ");
-    scanf("%d", &primeiraCartaPopulacao);
-
-    printf("Digite a área (em km²): ");
-    scanf("%f", &primeiraCartaArea);
-
-    printf("Digite o PIB (em bilhões de reais): ");
-    scanf("%f", &primeiraCartaPib);
-
-    printf("Digite o número de pontos turísticos: ");
-    scanf("%d", &primeiraCartaPontosTuristicos);
-
-
-    // Cadastro da segunda carta
-    printf("\n===== Cadastro da segunda carta =====\n");
-    printf("\nDigite o estado (letra de A a H): ");
-    scanf(" %c", &segundaCartaEstado);
-
-    printf("Digite o código da carta (ex: B02): ");
-    scanf("%s", segundaCartaID);
-
-    printf("Digite o nome da cidade: ");
-    scanf(" %s]", segundaCartaCidade);
-
-    printf("Digite a população: ");
-    scanf("%d", &segundaCartaPopulacao);
-
-    printf("Digite a área (em km²): ");
-    scanf("%f", &segundaCartaArea);
-
-    printf("Digite o PIB (em bilhões de reais): ");
-    scanf("%f", &segundaCartaPib);
-
-    printf("Digite o número de pontos turísticos: ");
-    scanf("%d", &segundaCartaPontosTuristicos);
-
-
-    // Exibição das informações da primeira carta
-    printf("\n\n===== Carta 1 =====\n");
-    printf("Código (ID): %s\n", primeiraCartaID);
-    printf("Estado: %c\n", primeiraCartaEstado);
-    printf("Nome da Cidade: %s\n", primeiraCartaCidade);
-    printf("População: %d\n", primeiraCartaPopulacao);
-    printf("Área: %.2f km²\n", primeiraCartaArea);
-    printf("PIB: R$ %.2f bilhões\n", primeiraCartaPib);
-    printf("Número de Pontos Turísticos: %d\n", primeiraCartaPontosTuristicos);
-
-
-    // Exibição das informações da segunda carta
-    printf("\n===== Carta 2 =====\n");
-    printf("Estado: %c\n", segundaCartaEstado);
-    printf("Código: %s\n", segundaCartaID);
-    printf("Nome da Cidade: %s\n", segundaCartaCidade);
-    printf("População: %d\n", segundaCartaPopulacao);
-    printf("Área: %.2f km²\n", segundaCartaArea);
-    printf("PIB: R$ %.2f bilhões\n", segundaCartaPib);
-    printf("Número de Pontos Turísticos: %d\n", segundaCartaPontosTuristicos);
+    // Mostrando as cartas cadastradas
+    mostrarCarta(1, primeiraCartaEstado, primeiraCartaID, primeiraCartaCidade, primeiraCartaPopulacao, primeiraCartaArea, primeiraCartaPib, primeiraCartaPontosTuristicos, primeiraCartaDensidadePopulacional, primeiraCartaPibPerCapita);
+    mostrarCarta(2, segundaCartaEstado, segundaCartaID, segundaCartaCidade, segundaCartaPopulacao, segundaCartaArea, segundaCartaPib, segundaCartaPontosTuristicos, segundaCartaDensidadePopulacional, segundaCartaPibPerCapita);
 
     return 0;
+}
+
+// Função para ler os dados da carta
+void cadastrarCarta(const char *carta, char *estado, char id[4], char cidade[50], int *populacao, float *area, float *pib, int *pontosTuristicos)
+{
+    printf("===== Cadastro da %s =====\n", carta);
+
+    printf("Digite o estado (letra de A a H): ");
+    scanf(" %c", estado);
+
+    printf("Digite o código da carta (ex: A01): ");
+    scanf("%s", id);
+
+    printf("Digite o nome da cidade: ");
+    scanf(" %[^\n]", cidade);
+
+    printf("Digite a população: ");
+    scanf("%d", populacao);
+
+    printf("Digite a área (em km²): ");
+    scanf("%f", area);
+
+    printf("Digite o PIB (em bilhões de reais): ");
+    scanf("%f", pib);
+
+    printf("Digite o número de pontos turísticos: ");
+    scanf("%d", pontosTuristicos);
+}
+
+// Função para calcular as estatísticas da carta
+void calcularEstatisticas(int populacao, float area, float pib, float *densidadePopulacional, float *pibPerCapita)
+{
+    // Calculando a densidade populacional
+    *densidadePopulacional = (float)populacao / area;
+
+    // Calculando o PIB per capita
+    *pibPerCapita = ((float)(pib * 1000000000)) / (float)populacao;
+}
+
+// Função para imprimir os dados da carta
+void mostrarCarta(int cartaNum, char estado, char id[4], char cidade[50], int populacao, float area, float pib, int pontosTuristicos, float densidadePopulacional, float pibPerCapita)
+{
+    printf("\n\n===== Carta %d =====\n", cartaNum);
+    printf("Estado: %c\n", estado);
+    printf("Código: %s\n", id);
+    printf("Nome da Cidade: %s\n", cidade);
+    printf("População: %d\n", populacao);
+    printf("Área: %.2f km²\n", area);
+    printf("PIB: %.2f bilhões de reais\n", pib);
+    printf("Número de Pontos Turísticos: %d\n", pontosTuristicos);
+    printf("Densidade Populacional: %.2f hab/km²\n", densidadePopulacional);
+    printf("PIB per Capita: %.2f reais\n", pibPerCapita);
 }
